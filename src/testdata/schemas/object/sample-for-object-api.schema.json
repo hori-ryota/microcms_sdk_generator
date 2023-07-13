@@ -1,0 +1,125 @@
+{
+  "apiFields": [
+    {
+      "idValue": "HLrHyRwIBB",
+      "fieldId": "textfield",
+      "name": "textfield",
+      "kind": "text"
+    },
+    {
+      "fieldId": "textarea",
+      "name": "textarea",
+      "kind": "textArea"
+    },
+    {
+      "fieldId": "richeditor",
+      "name": "richeditor",
+      "kind": "richEditorV2"
+    },
+    {
+      "fieldId": "image",
+      "name": "image",
+      "kind": "media"
+    },
+    {
+      "fieldId": "multipleimage",
+      "name": "multipleimage",
+      "kind": "mediaList"
+    },
+    {
+      "fieldId": "datetime",
+      "name": "datetime",
+      "kind": "date"
+    },
+    {
+      "fieldId": "boolean",
+      "name": "boolean",
+      "kind": "boolean"
+    },
+    {
+      "fieldId": "selectfield",
+      "name": "selectfield",
+      "kind": "select",
+      "selectItems": [
+        {
+          "id": "UgD_PoTJQ5",
+          "value": "option1"
+        },
+        {
+          "id": "pjYNEQEvr_",
+          "value": "option2"
+        }
+      ],
+      "selectInitialValue": [],
+      "multipleSelect": false
+    },
+    {
+      "fieldId": "multipleselectfield",
+      "name": "multipleselectfield",
+      "kind": "select",
+      "selectItems": [
+        {
+          "id": "MbtN0GJJba",
+          "value": "option1"
+        },
+        {
+          "id": "JdaHb1t7Ku",
+          "value": "option2"
+        }
+      ],
+      "selectInitialValue": [],
+      "multipleSelect": true
+    },
+    {
+      "fieldId": "number",
+      "name": "number",
+      "kind": "number"
+    },
+    {
+      "fieldId": "relation",
+      "name": "relation",
+      "kind": "relation"
+    },
+    {
+      "fieldId": "multirelation",
+      "name": "multirelation",
+      "kind": "relationList"
+    },
+    {
+      "fieldId": "customField",
+      "name": "customField",
+      "kind": "custom",
+      "customFieldCreatedAt": "2023-07-16T02:27:32.099Z"
+    },
+    {
+      "fieldId": "repeater",
+      "name": "repeater",
+      "kind": "repeater",
+      "customFieldCreatedAtList": [
+        "2023-07-16T02:27:32.099Z"
+      ]
+    }
+  ],
+  "customFields": [
+    {
+      "createdAt": "2023-07-16T02:27:32.099Z",
+      "fieldId": "customField1",
+      "name": "customField1",
+      "fields": [
+        {
+          "idValue": "Pqm8eXUAVT",
+          "fieldId": "title",
+          "name": "title",
+          "kind": "text"
+        }
+      ],
+      "position": [
+        [
+          "Pqm8eXUAVT"
+        ]
+      ],
+      "updatedAt": "2023-07-16T02:27:32.099Z",
+      "viewerGroup": "hh4"
+    }
+  ]
+}

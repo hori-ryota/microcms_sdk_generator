@@ -1,0 +1,22 @@
+name: "Get asdf tool version"
+description: "Get asdf tool version from configuration files."
+
+inputs:
+  dir_path:
+    description: "The path of target directory"
+    required: true
+  tool_name:
+    description: "The name of tool. (`asdf` config format)"
+    required: true
+outputs:
+  version:
+    description: "Got version"
+    value: ${{ steps.extract-version.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Extract tool version from the configuration file"
+      shell: "bash"
+      id: extract-version
+      run: echo "version=$(./.github/actions/get-asdf-tool-version/get_asdf_tool_version.sh "${{ inputs.tool_name }}" "${{ inputs.dir_path }}")" >> "$GITHUB_OUTPUT"

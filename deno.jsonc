@@ -1,0 +1,23 @@
+{
+  "imports": {
+    // use only testdata
+    "zod": "https://deno.land/x/zod@v3.21.4/mod.ts"
+  },
+  "tasks": {
+    "build:npm": "deno run -A ./scripts/build_npm.ts",
+    "fmt": "deno fmt",
+    "fmt:check": "deno fmt --check",
+    "test": "deno test -A src/",
+    "lint": "deno lint",
+    "check": "deno task fmt:check && deno task lint && deno task test",
+    "run-for-test": "deno run -A ./src/main.ts ./src/testdata/schemas ./src/testdata/generated.ts"
+  },
+  "lint": {
+    "include": ["./src/"],
+    "exclude": ["./npm"]
+  },
+  "fmt": {
+    "include": ["./"],
+    "exclude": ["./npm", "./src/testdata/generated.ts"]
+  }
+}

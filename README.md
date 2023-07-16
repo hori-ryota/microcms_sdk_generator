@@ -32,7 +32,7 @@ Installation and usage are easily handled via npm or Deno.
 Execute the following command for installation using Deno.
 
 ```sh
-deno install --allow-net --unstable --reload https://deno.land/x/microcms_sdk_generator/mod.ts
+deno install --allow-read --allow-write --name microcms_sdk_generator https://deno.land/x/microcms_sdk_generator/src/main.ts
 ```
 
 > [microcms\_sdk\_generator \| Deno](https://deno.land/x/microcms_sdk_generator)

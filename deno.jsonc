@@ -10,7 +10,7 @@
     "test": "deno test -A src/",
     "lint": "deno lint",
     "check": "deno task fmt:check && deno task lint && deno task test",
-    "run-for-test": "deno run -A ./src/main.ts ./src/testdata/schemas ./src/testdata/generated.ts"
+    "run-for-test": "deno run -A ./microcms_sdk_generator.ts ./src/testdata/schemas ./src/testdata/generated.ts"
   },
   "lint": {
     "include": ["./src/"],

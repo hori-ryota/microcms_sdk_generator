@@ -13,4 +13,6 @@ export async function main() {
   await generate({ schemaDir, dstFilePath });
 }
 
-await main();
+if (import.meta.main) {
+  await main();
+}

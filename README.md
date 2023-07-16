@@ -32,10 +32,16 @@ Installation and usage are easily handled via npm or Deno.
 Execute the following command for installation using Deno.
 
 ```sh
-deno install --allow-read --allow-write --name microcms_sdk_generator https://deno.land/x/microcms_sdk_generator/src/main.ts
+deno install --allow-read --allow-write https://deno.land/x/microcms_sdk_generator/microcms_sdk_generator.ts
 ```
 
 > [microcms\_sdk\_generator \| Deno](https://deno.land/x/microcms_sdk_generator)
+
+Or execute directly.
+
+```sh
+deno run --allow-read --allow-write https://deno.land/x/microcms_sdk_generator/microcms_sdk_generator.ts
+```
 
 ### Installation with npm
 
@@ -46,6 +52,12 @@ npm install --global microcms_sdk_generator
 ```
 
 > [microcms\_sdk\_generator \- npm](https://www.npmjs.com/package/microcms_sdk_generator)
+
+Or execute directly.
+
+```sh
+npx microcms_sdk_generator
+```
 
 ## Usage
 

@@ -35,6 +35,8 @@ Execute the following command for installation using Deno.
 deno install --allow-net --unstable --reload https://deno.land/x/microcms_sdk_generator/mod.ts
 ```
 
+> [microcms\_sdk\_generator \| Deno](https://deno.land/x/microcms_sdk_generator)
+
 ### Installation with npm
 
 Execute the following command for installation using npm.
@@ -42,6 +44,8 @@ Execute the following command for installation using npm.
 ```sh
 npm install --global microcms_sdk_generator
 ```
+
+> [microcms\_sdk\_generator \- npm](https://www.npmjs.com/package/microcms_sdk_generator)
 
 ## Usage
 

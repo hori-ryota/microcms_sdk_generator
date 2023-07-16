@@ -51,7 +51,7 @@ esm/testdata/
     version: Deno.args[0],
     description: "A type-safe MicroCMS SDK Generator",
     license: "MIT",
-    keywords: ["microCMS", "sdk", "generator"],
+    keywords: ["microCMS", "sdk", "generator", "deno"],
     repository: {
       type: "git",
       url: "git+https://github.com/hori-ryota/microcms_sdk_generator.git",

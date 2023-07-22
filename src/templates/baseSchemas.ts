@@ -30,7 +30,11 @@ export const makeListResponseSchema = <ContentSchema extends z.AnyZodObject>(
   });
 export type ListResponse = z.infer<ReturnType<typeof makeListResponseSchema>>;
 
-export const ObjectContentMetadataSchema = MicroCmsObjectContentFieldsSchema.extend({
+export const ObjectContentMetadataSchema = z.object({
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  publishedAt: z.string().datetime().nullable(),
+  revisedAt: z.string().datetime().nullable(),
   closedAt: z.string().datetime().nullable(),
   status: z.tuple([
     z.enum(["DRAFT", "PUBLISH", "PUBLISH_AND_DRAFT", "CLOSED"]),

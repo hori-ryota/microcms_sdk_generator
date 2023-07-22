@@ -34,21 +34,24 @@ export const makeListResponseSchema = <ContentSchema extends z.AnyZodObject>(
   });
 export type ListResponse = z.infer<ReturnType<typeof makeListResponseSchema>>;
 
-export const ObjectContentMetadataSchema =
-  MicroCmsObjectContentFieldsSchema.extend({
-    closedAt: z.string().datetime().nullable(),
-    status: z.tuple([
-      z.enum(["DRAFT", "PUBLISH", "PUBLISH_AND_DRAFT", "CLOSED"]),
-    ]),
-    customStatus: z.tuple([z.unknown()]).nullable(),
-    draftKey: z.string().nullable(),
-    reservationTime: z
-      .object({
-        publishTime: z.string().datetime().nullable(),
-        stopTime: z.string().datetime().nullable(),
-      })
-      .nullable(),
-  });
+export const ObjectContentMetadataSchema = z.object({
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+  publishedAt: z.string().datetime().nullable(),
+  revisedAt: z.string().datetime().nullable(),
+  closedAt: z.string().datetime().nullable(),
+  status: z.tuple([
+    z.enum(["DRAFT", "PUBLISH", "PUBLISH_AND_DRAFT", "CLOSED"]),
+  ]),
+  customStatus: z.tuple([z.unknown()]).nullable(),
+  draftKey: z.string().nullable(),
+  reservationTime: z
+    .object({
+      publishTime: z.string().datetime().nullable(),
+      stopTime: z.string().datetime().nullable(),
+    })
+    .nullable(),
+});
 export type ObjectContentMetadata = z.infer<typeof ObjectContentMetadataSchema>;
 
 export const ListContentMetadataSchema = ObjectContentMetadataSchema.extend({

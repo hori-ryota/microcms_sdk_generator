@@ -56,7 +56,7 @@ export class ParseResponseError extends Error {
     public readonly responseHeaders: Headers,
   ) {
     super(
-      \`Failed to parse response with status code \${statusCode}: \${JSON.stringify(
+      \`Failed to parse response with status code \${statusCode}: \${parseError.message}: \${JSON.stringify(
         data
       )}\`
     );

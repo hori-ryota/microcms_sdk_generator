@@ -23,11 +23,11 @@ export type MicroCmsListContentFields = z.infer<
   typeof MicroCmsListContentFieldsSchema
 >;
 
-export const makeListResponseSchema = <ContentSchema extends z.AnyZodObject>(
-  contentSchema: ContentSchema,
+export const makeListResponseSchema = <DefTypeSchema extends z.AnyZodObject>(
+  defTypeSchema: DefTypeSchema,
 ) =>
   z.object({
-    contents: z.array(MicroCmsListContentFieldsSchema.merge(contentSchema)),
+    contents: z.array(MicroCmsListContentFieldsSchema.merge(defTypeSchema)),
     totalCount: z.number(),
     limit: z.number(),
     offset: z.number(),
@@ -59,10 +59,10 @@ export const ListContentMetadataSchema = ObjectContentMetadataSchema.extend({
 });
 export type ListContentMetadata = z.infer<typeof ListContentMetadataSchema>;
 
-export const SampleForListApiSchema = z.object({
+export const SampleForListApiDefSchema = z.object({
   textfield: z.string().optional(),
 });
-export type SampleForListApi = z.infer<typeof SampleForListApiSchema>;
+export type SampleForListApiDef = z.infer<typeof SampleForListApiDefSchema>;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const SampleForObjectApi_CustomField1Schema = z.object({
@@ -74,7 +74,7 @@ export type SampleForObjectApi_CustomField1 = z.infer<
   typeof SampleForObjectApi_CustomField1Schema
 >;
 
-export const SampleForObjectApiSchema = z.object({
+export const SampleForObjectApiDefSchema = z.object({
   textfield: z.string().optional(),
   textarea: z.string().optional(),
   richeditor: z.string().optional(),
@@ -104,14 +104,14 @@ export const SampleForObjectApiSchema = z.object({
   customField: SampleForObjectApi_CustomField1Schema.optional(),
   repeater: z.array(SampleForObjectApi_CustomField1Schema).optional(),
 });
-export type SampleForObjectApi = z.infer<typeof SampleForObjectApiSchema>;
+export type SampleForObjectApiDef = z.infer<typeof SampleForObjectApiDefSchema>;
 
-export const SampleForListApiInputSchema = SampleForListApiSchema.omit(
+export const SampleForListApiInputSchema = SampleForListApiDefSchema.omit(
   {},
 ).extend({});
 export type SampleForListApiInput = z.infer<typeof SampleForListApiInputSchema>;
 
-export const SampleForObjectApiInputSchema = SampleForObjectApiSchema.omit({
+export const SampleForObjectApiInputSchema = SampleForObjectApiDefSchema.omit({
   multipleimage: true,
   relation: true,
   multirelation: true,
@@ -122,6 +122,29 @@ export const SampleForObjectApiInputSchema = SampleForObjectApiSchema.omit({
 export type SampleForObjectApiInput = z.infer<
   typeof SampleForObjectApiInputSchema
 >;
+
+export const SampleForListApiOutputSchema = makeListResponseSchema(
+  SampleForListApiDefSchema,
+);
+
+export type SampleForListApiOutput = z.infer<
+  typeof SampleForListApiOutputSchema
+>;
+
+export const SampleForListApiSchema =
+  SampleForListApiOutputSchema.shape.contents.element;
+
+export type SampleForListApi = z.infer<typeof SampleForListApiSchema>;
+
+export const SampleForObjectApiOutputSchema = SampleForObjectApiDefSchema;
+
+export type SampleForObjectApiOutput = z.infer<
+  typeof SampleForObjectApiOutputSchema
+>;
+
+export const SampleForObjectApiSchema = SampleForObjectApiOutputSchema;
+
+export type SampleForObjectApi = z.infer<typeof SampleForObjectApiSchema>;
 
 export type RequestOptions = RequestInit & {
   customFetcher?: typeof fetch;
@@ -319,7 +342,7 @@ export function createClient({
       }: QueryForListApi & { options?: RequestOptions }) =>
         requestGet(
           contentUrl(`sample-for-list-api`),
-          makeListResponseSchema(SampleForListApiSchema),
+          makeListResponseSchema(SampleForListApiDefSchema),
           query,
           options,
         ),
@@ -333,7 +356,7 @@ export function createClient({
       }) =>
         requestGet(
           contentUrl(`sample-for-list-api/${id}`),
-          SampleForListApiSchema.merge(MicroCmsListContentFieldsSchema),
+          SampleForListApiDefSchema.merge(MicroCmsListContentFieldsSchema),
           query,
           options,
         ),
@@ -405,7 +428,7 @@ export function createClient({
       }) =>
         requestGet(
           managementUrl(`contents/sample-for-list-api`),
-          makeListResponseSchema(ListContentMetadataSchema),
+          SampleForListApiOutputSchema,
           query,
           options,
         ),
@@ -448,7 +471,7 @@ export function createClient({
         const { options, ...query } = param ?? {};
         return requestGet(
           contentUrl(`sample-for-object-api`),
-          SampleForObjectApiSchema.merge(MicroCmsObjectContentFieldsSchema),
+          SampleForObjectApiDefSchema.merge(MicroCmsObjectContentFieldsSchema),
           query,
           options,
         );

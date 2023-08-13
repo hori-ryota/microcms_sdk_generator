@@ -1,8 +1,8 @@
 import { assertObjectMatch } from "https://deno.land/std@0.194.0/testing/asserts.ts";
 import {
   createClient,
-  SampleForListApi,
-  SampleForListApiSchema,
+  SampleForListApiDef,
+  SampleForListApiDefSchema,
   SampleForObjectApiInputSchema,
 } from "./generated.ts";
 
@@ -13,7 +13,7 @@ Deno.test({
     // fixtures
     const now = new Date();
     const nowString = now.toISOString();
-    const sample1: SampleForListApi = {
+    const sample1: SampleForListApiDef = {
       textfield: "sample1" + nowString,
     };
 
@@ -77,7 +77,7 @@ Deno.test({
     }
     const patchResp = await client.sampleForListApi.patch({
       id: getResp.data.id,
-      content: SampleForListApiSchema.parse(getResp.data),
+      content: SampleForListApiDefSchema.parse(getResp.data),
     });
     if (!patchResp.ok) {
       throw patchResp;

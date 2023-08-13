@@ -1,6 +1,7 @@
 import { parseSchemaFiles } from "./schemaFilesParser.ts";
 import { format } from "npm:prettier@^3.0.0";
-import { printContentImpl } from "./templates/content.ts";
+import { printDefTypeImpl } from "./templates/defType.ts";
+import { printOutputSchema } from "./templates/outputSchema.ts";
 import { printClientImpl } from "./templates/client.ts";
 import { printBaseSchemas } from "./templates/baseSchemas.ts";
 import { printInputSchema } from "./templates/inputSchema.ts";
@@ -31,10 +32,13 @@ export async function generateAsString({
       header,
       await printBaseSchemas(),
       (
-        await Promise.all(apis.map(async (api) => await printContentImpl(api)))
+        await Promise.all(apis.map(async (api) => await printDefTypeImpl(api)))
       ).join("\n"),
       (
         await Promise.all(apis.map(async (api) => await printInputSchema(api)))
+      ).join("\n"),
+      (
+        await Promise.all(apis.map(async (api) => await printOutputSchema(api)))
       ).join("\n"),
       await printClientImpl(apis),
     ].join("\n"),

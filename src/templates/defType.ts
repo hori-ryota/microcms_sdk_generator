@@ -1,21 +1,12 @@
 import { match } from "npm:ts-pattern@^5.0.3";
 import { format } from "npm:prettier@^3.0.0";
-import { pascalCase } from "https://deno.land/x/case@2.1.1/mod.ts";
 import type { ApiSchema } from "../schemaParser.ts";
-
-function customFieldSchemaName(
-  endpointName: string,
-  customFieldId: string,
-): string {
-  return `${customFieldTypeName(endpointName, customFieldId)}Schema`;
-}
-
-function customFieldTypeName(
-  endpointName: string,
-  customFieldId: string,
-): string {
-  return `${pascalCase(endpointName)}_${pascalCase(customFieldId)}`;
-}
+import {
+  customFieldTypeName,
+  customFieldTypeSchemaName,
+  defTypeName,
+  defTypeSchemaName,
+} from "./helper.ts";
 
 function fieldToImpl(
   endpointName: string,
@@ -74,12 +65,12 @@ function fieldToImpl(
         if (!customField) {
           return `z.unknown()`;
         }
-        return customFieldSchemaName(endpointName, customField.fieldId);
+        return customFieldTypeSchemaName(endpointName, customField.fieldId);
       })
       .with({ kind: "repeater" }, (field) => {
         let schema = customFields
           .filter((c) => field.customFieldCreatedAtList.includes(c.createdAt))
-          .map((c) => customFieldSchemaName(endpointName, c.fieldId))
+          .map((c) => customFieldTypeSchemaName(endpointName, c.fieldId))
           .join(",");
         if (field.customFieldCreatedAtList.length > 1) {
           schema = `z.unknown([${schema}])`;
@@ -95,7 +86,10 @@ function customFieldToSchema(
   endpointName: string,
   customField: ApiSchema["customFields"][number],
 ): string {
-  const schemaName = customFieldSchemaName(endpointName, customField.fieldId);
+  const schemaName = customFieldTypeSchemaName(
+    endpointName,
+    customField.fieldId,
+  );
   const typeName = customFieldTypeName(endpointName, customField.fieldId);
   return `// eslint-disable-next-line @typescript-eslint/naming-convention
   export const ${schemaName} = z.object({
@@ -110,7 +104,7 @@ function customFieldToSchema(
   `;
 }
 
-export async function printContentImpl({
+export async function printDefTypeImpl({
   endpointName,
   apiSchema,
 }: {
@@ -124,7 +118,7 @@ export async function printContentImpl({
         .map((c) => customFieldToSchema(endpointName, c))
         .join("\n")
     }
-export const ${pascalCase(endpointName)}Schema = z.object({
+export const ${defTypeSchemaName(endpointName)} = z.object({
     ${
       apiSchema.apiFields
         .map((field) =>
@@ -133,11 +127,11 @@ export const ${pascalCase(endpointName)}Schema = z.object({
         .join("\n")
     }
       })
-      export type ${pascalCase(endpointName)} = z.infer<typeof ${
-      pascalCase(
+      export type ${
+      defTypeName(
         endpointName,
       )
-    }Schema>
+    } = z.infer<typeof ${defTypeSchemaName(endpointName)}>
 `,
     {
       parser: "typescript",

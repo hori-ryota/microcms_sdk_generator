@@ -19,11 +19,11 @@ export type OnlyId = z.infer<typeof OnlyIdSchema>;
 export const MicroCmsListContentFieldsSchema = MicroCmsObjectContentFieldsSchema.merge(OnlyIdSchema);
 export type MicroCmsListContentFields = z.infer<typeof MicroCmsListContentFieldsSchema>;
 
-export const makeListResponseSchema = <ContentSchema extends z.AnyZodObject>(
-  contentSchema: ContentSchema,
+export const makeListResponseSchema = <DefTypeSchema extends z.AnyZodObject>(
+  defTypeSchema: DefTypeSchema,
 ) =>
   z.object({
-    contents: z.array(MicroCmsListContentFieldsSchema.merge(contentSchema)),
+    contents: z.array(MicroCmsListContentFieldsSchema.merge(defTypeSchema)),
     totalCount: z.number(),
     limit: z.number(),
     offset: z.number(),

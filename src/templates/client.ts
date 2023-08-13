@@ -1,8 +1,12 @@
 import { match } from "npm:ts-pattern@^5.0.3";
 import { format } from "npm:prettier@^3.0.0";
-import { pascalCase } from "https://deno.land/x/case@2.1.1/mod.ts";
 import { ApiDefinition } from "../schemaFilesParser.ts";
 import camelCase from "https://deno.land/x/case@2.1.1/camelCase.ts";
+import {
+  defTypeSchemaName,
+  inputTypeName,
+  outputTypeSchemaName,
+} from "./helper.ts";
 
 export async function printClientImpl(
   apiDefinitions: ApiDefinition[],
@@ -199,10 +203,8 @@ export function createClient({
 
   return {${
       apiDefinitions.map((apiDefinition) => {
-        const pascalCaseEndpointName = pascalCase(apiDefinition.endpointName);
-        const camelCaseEndpointName = camelCase(apiDefinition.endpointName);
-        const schemaName = pascalCaseEndpointName + "Schema";
-        const inputTypeName = pascalCaseEndpointName + "Input";
+        const endpointName = apiDefinition.endpointName;
+        const camelCaseEndpointName = camelCase(endpointName);
         return `${camelCaseEndpointName}: {
             ${
           match(apiDefinition.apiType)
@@ -213,8 +215,12 @@ export function createClient({
                     ...query
                   }: QueryForListApi & {options?: RequestOptions}) =>
                     requestGet(
-                      contentUrl(\`${apiDefinition.endpointName}\`),
-                      makeListResponseSchema(${schemaName}),
+                      contentUrl(\`${endpointName}\`),
+                      makeListResponseSchema(${
+                  defTypeSchemaName(
+                    endpointName,
+                  )
+                }),
                       query,
                       options,
                     ),`,
@@ -227,44 +233,48 @@ export function createClient({
                     options?: RequestOptions;
                   }) =>
                     requestGet(
-                      contentUrl(\`${apiDefinition.endpointName}/\${id}\`),
-                      ${schemaName}.merge(MicroCmsListContentFieldsSchema),
+                      contentUrl(\`${endpointName}/\${id}\`),
+                      ${
+                  defTypeSchemaName(
+                    endpointName,
+                  )
+                }.merge(MicroCmsListContentFieldsSchema),
                       query,
                       options,
                     ),`,
                 `post: ({content, status, options}: {
-                    content: ${inputTypeName};
+                    content: ${inputTypeName(endpointName)};
                     status?: "draft";
                     options?: RequestOptions;
                   }) =>
                     requestWrite(
                       "POST",
-                      contentUrl(\`${apiDefinition.endpointName}\${status ? \`?status=\${status}\` : ""}\`),
+                      contentUrl(\`${endpointName}\${status ? \`?status=\${status}\` : ""}\`),
                       OnlyIdSchema,
                       content,
                       options,
                     ),`,
                 `put: ({id, content, status, options}: {
                     id: string;
-                    content: ${inputTypeName};
+                    content: ${inputTypeName(endpointName)};
                     status?: "draft";
                     options?: RequestOptions;
                   }) =>
                     requestWrite(
                       "PUT",
-                      contentUrl(\`${apiDefinition.endpointName}/\${id}\${status ? \`?status=\${status}\` : ""}\`),
+                      contentUrl(\`${endpointName}/\${id}\${status ? \`?status=\${status}\` : ""}\`),
                       OnlyIdSchema,
                       content,
                       options,
                     ),`,
                 `patch: ({id, content, options}: {
                     id: string;
-                    content: Partial<${inputTypeName}>;
+                    content: Partial<${inputTypeName(endpointName)}>;
                     options?: RequestOptions;
                   }) =>
                     requestWrite(
                       "PATCH",
-                      contentUrl(\`${apiDefinition.endpointName}/\${id}\`),
+                      contentUrl(\`${endpointName}/\${id}\`),
                       OnlyIdSchema,
                       content,
                       options,
@@ -275,7 +285,7 @@ export function createClient({
                   }) =>
                     requestWrite(
                       "DELETE",
-                      contentUrl(\`${apiDefinition.endpointName}/\${id}\`),
+                      contentUrl(\`${endpointName}/\${id}\`),
                       z.object({}),
                       undefined,
                       options,
@@ -285,8 +295,8 @@ export function createClient({
                     ...query
                   }: Pick<QueryForListApi, "limit" | "offset"> & {options?: RequestOptions}) =>
                     requestGet(
-                      managementUrl(\`contents/${apiDefinition.endpointName}\`),
-                      makeListResponseSchema(ListContentMetadataSchema),
+                      managementUrl(\`contents/${endpointName}\`),
+                      ${outputTypeSchemaName(endpointName)},
                       query,
                       options,
                     ),`,
@@ -298,7 +308,7 @@ export function createClient({
                     options?: RequestOptions;
                   }) =>
                     requestGet(
-                      managementUrl(\`contents/${apiDefinition.endpointName}/\${id}\`),
+                      managementUrl(\`contents/${endpointName}/\${id}\`),
                       ListContentMetadataSchema,
                       undefined,
                       options,
@@ -310,7 +320,7 @@ export function createClient({
                   }) =>
                     requestWrite(
                       "PATCH",
-                      managementUrl(\`contents/${apiDefinition.endpointName}/\${id}/status\`),
+                      managementUrl(\`contents/${endpointName}/\${id}/status\`),
                       OnlyIdSchema,
                       {status: [status]},
                       options,
@@ -325,8 +335,12 @@ export function createClient({
                   }) => {
                     const { options, ...query } = param ?? {};
                     return requestGet(
-                      contentUrl(\`${apiDefinition.endpointName}\`),
-                      ${schemaName}.merge(MicroCmsObjectContentFieldsSchema),
+                      contentUrl(\`${endpointName}\`),
+                      ${
+                  defTypeSchemaName(
+                    endpointName,
+                  )
+                }.merge(MicroCmsObjectContentFieldsSchema),
                       query,
                       options,
                     );
@@ -334,12 +348,12 @@ export function createClient({
                 // NOTE: post is not supported for object type
                 // NOTE: put is not supported for object type
                 `patch: ({content, options}: {
-                    content: Partial<${inputTypeName}>;
+                    content: Partial<${inputTypeName(endpointName)}>;
                     options?: RequestOptions;
                   }) =>
                     requestWrite(
                       "PATCH",
-                      contentUrl(\`${apiDefinition.endpointName}\`),
+                      contentUrl(\`${endpointName}\`),
                       OnlyIdSchema,
                       content,
                       options,
@@ -349,7 +363,7 @@ export function createClient({
                   }) => {
                     const { options } = params ?? {};
                     return requestGet(
-                      managementUrl(\`contents/${apiDefinition.endpointName}\`),
+                      managementUrl(\`contents/${endpointName}\`),
                       ObjectContentMetadataSchema,
                       undefined,
                       options,
@@ -362,7 +376,7 @@ export function createClient({
                 // }) => {
                 //   return requestWrite(
                 //     "PATCH",
-                //     managementUrl(\`contents/${apiDefinition.endpointName}/status\`),
+                //     managementUrl(\`contents/${endpointName}/status\`),
                 //     // FIXME: fix schema
                 //     OnlyIdSchema,
                 //     {status: [status]},

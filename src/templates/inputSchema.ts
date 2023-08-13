@@ -1,6 +1,10 @@
 import { format } from "npm:prettier@^3.0.0";
-import { pascalCase } from "https://deno.land/x/case@2.1.1/mod.ts";
 import type { ApiSchema } from "../schemaParser.ts";
+import {
+  defTypeSchemaName,
+  inputTypeName,
+  inputTypeSchemaName,
+} from "./helper.ts";
 
 export async function printInputSchema({
   endpointName,
@@ -9,12 +13,13 @@ export async function printInputSchema({
   endpointName: string;
   apiSchema: ApiSchema;
 }): Promise<string> {
-  const inputSchemaName = `${pascalCase(endpointName)}InputSchema`;
-  const inputTypeName = `${pascalCase(endpointName)}Input`;
-  const schemaName = `${pascalCase(endpointName)}Schema`;
   return await format(
     `
-    export const ${inputSchemaName} = ${schemaName}.omit({
+    export const ${inputTypeSchemaName(endpointName)} = ${
+      defTypeSchemaName(
+        endpointName,
+      )
+    }.omit({
       ${
       apiSchema.apiFields
         .filter((f) =>
@@ -46,7 +51,11 @@ export async function printInputSchema({
         .join("\n")
     }
     })
-  export type ${inputTypeName} = z.infer<typeof ${inputSchemaName}>
+  export type ${
+      inputTypeName(
+        endpointName,
+      )
+    } = z.infer<typeof ${inputTypeSchemaName(endpointName)}>
 `,
     {
       parser: "typescript",

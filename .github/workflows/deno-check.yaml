@@ -27,7 +27,7 @@ jobs:
           dir_path: .
           tool_name: nodejs
       - name: Set up Node.js
-        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3.7.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "${{ steps.nodejs-version.outputs.version }}"
           registry-url: "https://registry.npmjs.org"

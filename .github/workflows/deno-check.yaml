@@ -6,6 +6,10 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # for npm publish with trusted publishing (OIDC)
+      id-token: write
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
@@ -30,7 +34,6 @@ jobs:
         uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3.7.0
         with:
           node-version: "${{ steps.nodejs-version.outputs.version }}"
-          registry-url: "https://registry.npmjs.org"
 
       - name: Check generated
         run: deno task run-for-test && test -z "$(git status -s)"
@@ -51,8 +54,7 @@ jobs:
       - name: Build:npm
         if: startsWith(github.ref, 'refs/tags/')
         run: deno task build:npm ${{ steps.get_tag.outputs.TAG_VERSION }}
+      # Authenticates via npm trusted publishing (OIDC); no token needed
       - name: npm publish
         if: startsWith(github.ref, 'refs/tags/')
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_FOR_PUBLISH }}
         run: cd npm && npm publish

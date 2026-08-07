@@ -23,8 +23,9 @@ export type MicroCmsListContentFields = z.infer<
   typeof MicroCmsListContentFieldsSchema
 >;
 
-export const makeListResponseSchema = <DefTypeSchema extends z.ZodObject>(
-  defTypeSchema: DefTypeSchema,
+// NOTE: 型引数をスキーマ側にすると `.shape` が制約の Record<string, any> に落ちて推論が壊れる
+export const makeListResponseSchema = <Shape extends z.core.$ZodShape>(
+  defTypeSchema: z.ZodObject<Shape>,
 ) =>
   z.object({
     contents: z.array(

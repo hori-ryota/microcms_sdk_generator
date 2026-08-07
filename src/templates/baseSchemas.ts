@@ -1,13 +1,13 @@
-import { format } from "npm:prettier@^3.0.0";
+import { format } from "prettier";
 export async function printBaseSchemas(): Promise<string> {
   return await format(
     `
 // cf. https://document.microcms.io/manual/automatic-grant-fields
 export const MicroCmsObjectContentFieldsSchema = z.object({
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  publishedAt: z.string().datetime().optional(),
-  revisedAt: z.string().datetime().optional(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  publishedAt: z.iso.datetime().optional(),
+  revisedAt: z.iso.datetime().optional(),
 });
 export type MicroCmsObjectContentFields = z.infer<typeof MicroCmsObjectContentFieldsSchema>;
 
@@ -16,14 +16,14 @@ export const OnlyIdSchema = z.object({
 })
 export type OnlyId = z.infer<typeof OnlyIdSchema>;
 
-export const MicroCmsListContentFieldsSchema = MicroCmsObjectContentFieldsSchema.merge(OnlyIdSchema);
+export const MicroCmsListContentFieldsSchema = MicroCmsObjectContentFieldsSchema.extend(OnlyIdSchema.shape);
 export type MicroCmsListContentFields = z.infer<typeof MicroCmsListContentFieldsSchema>;
 
-export const makeListResponseSchema = <DefTypeSchema extends z.AnyZodObject>(
+export const makeListResponseSchema = <DefTypeSchema extends z.ZodObject>(
   defTypeSchema: DefTypeSchema,
 ) =>
   z.object({
-    contents: z.array(MicroCmsListContentFieldsSchema.merge(defTypeSchema)),
+    contents: z.array(MicroCmsListContentFieldsSchema.extend(defTypeSchema.shape)),
     totalCount: z.number(),
     limit: z.number(),
     offset: z.number(),
@@ -31,11 +31,11 @@ export const makeListResponseSchema = <DefTypeSchema extends z.AnyZodObject>(
 export type ListResponse = z.infer<ReturnType<typeof makeListResponseSchema>>;
 
 export const ObjectContentMetadataSchema = z.object({
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  publishedAt: z.string().datetime().nullable(),
-  revisedAt: z.string().datetime().nullable(),
-  closedAt: z.string().datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  publishedAt: z.iso.datetime().nullable(),
+  revisedAt: z.iso.datetime().nullable(),
+  closedAt: z.iso.datetime().nullable(),
   status: z.tuple([
     z.enum(["DRAFT", "PUBLISH", "PUBLISH_AND_DRAFT", "CLOSED"]),
   ]),
@@ -43,8 +43,8 @@ export const ObjectContentMetadataSchema = z.object({
   draftKey: z.string().nullable(),
   reservationTime: z
     .object({
-      publishTime: z.string().datetime().nullable(),
-      stopTime: z.string().datetime().nullable(),
+      publishTime: z.iso.datetime().nullable(),
+      stopTime: z.iso.datetime().nullable(),
     })
     .nullable(),
 });

@@ -1,7 +1,14 @@
 {
   "imports": {
-    // use only testdata
-    "zod": "https://deno.land/x/zod@v3.21.4/mod.ts"
+    "@std/assert": "jsr:@std/assert@^1.0.19",
+    "@std/fs/exists": "jsr:@std/fs@^1.0.24/exists",
+    "@std/fs/expand-glob": "jsr:@std/fs@^1.0.24/expand-glob",
+    "@std/fs/walk": "jsr:@std/fs@^1.0.24/walk",
+    "@std/path": "jsr:@std/path@^1.1.6",
+    "@std/text": "jsr:@std/text@^1.0.19",
+    "prettier": "npm:prettier@^3.9.6",
+    "ts-pattern": "npm:ts-pattern@^5.9.0",
+    "zod": "npm:zod@^4.4.3"
   },
   "tasks": {
     "build:npm": "deno run -A ./scripts/build_npm.ts",

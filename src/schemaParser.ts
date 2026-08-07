@@ -1,4 +1,4 @@
-import { z } from "https://deno.land/x/zod@v3.21.4/mod.ts";
+import { z } from "zod";
 
 export const TextFieldSchema = z.object({
   idValue: z.string().optional(),
@@ -163,8 +163,8 @@ export const ApiFieldSchema = z.union([
 ]);
 
 export const CustomFieldSchema = z.object({
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
   fieldId: z.string(),
   name: z.string(),
   description: z.string().optional(),

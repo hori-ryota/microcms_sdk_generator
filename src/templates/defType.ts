@@ -1,5 +1,5 @@
-import { match } from "npm:ts-pattern@^5.0.3";
-import { format } from "npm:prettier@^3.0.0";
+import { match } from "ts-pattern";
+import { format } from "prettier";
 import type { ApiSchema } from "../schemaParser.ts";
 import {
   customFieldTypeName,
@@ -22,7 +22,7 @@ function fieldToImpl(
         { kind: "media" },
         () =>
           `z.object({
-          url: z.string().url(),
+          url: z.url(),
           height: z.number(),
           width: z.number(),
         })`,
@@ -31,12 +31,12 @@ function fieldToImpl(
         { kind: "mediaList" },
         () =>
           `z.array(z.object({
-          url: z.string().url(),
+          url: z.url(),
           height: z.number(),
           width: z.number(),
         }))`,
       )
-      .with({ kind: "date" }, () => `z.string().datetime()`)
+      .with({ kind: "date" }, () => `z.iso.datetime()`)
       .with({ kind: "boolean" }, () => `z.boolean()`)
       .with(
         { kind: "select", multipleSelect: false },
@@ -73,7 +73,7 @@ function fieldToImpl(
           .map((c) => customFieldTypeSchemaName(endpointName, c.fieldId))
           .join(",");
         if (field.customFieldCreatedAtList.length > 1) {
-          schema = `z.unknown([${schema}])`;
+          schema = `z.union([${schema}])`;
         }
         return `z.array(${schema})`;
       })

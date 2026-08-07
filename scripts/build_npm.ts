@@ -1,4 +1,4 @@
-import { build, emptyDir } from "https://deno.land/x/dnt@0.37.0/mod.ts";
+import { build, emptyDir } from "jsr:@deno/dnt@^0.43.2";
 
 await emptyDir("./npm");
 
@@ -15,15 +15,10 @@ await build({
     deno: true,
   },
   scriptModule: false,
-  mappings: {
-    "https://deno.land/x/zod@v3.21.4/mod.ts": {
-      name: "zod",
-      version: "^3.21.4",
-    },
-  },
+  importMap: "deno.jsonc",
   compilerOptions: {
-    lib: ["ES2022", "DOM"],
-    target: "ES2022",
+    lib: ["ES2023", "ESNext.Collection", "ESNext.Array", "DOM"],
+    target: "ES2023",
   },
   postBuild() {
     Deno.copyFileSync("./LICENSE", "./npm/LICENSE");

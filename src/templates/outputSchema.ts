@@ -1,5 +1,5 @@
-import { match } from "npm:ts-pattern@^5.0.3";
-import { format } from "npm:prettier@^3.0.0";
+import { match } from "ts-pattern";
+import { format } from "prettier";
 import {
   defTypeSchemaName,
   outputTypeName,

@@ -1,4 +1,4 @@
-import { format } from "npm:prettier@^3.0.0";
+import { format } from "prettier";
 import type { ApiSchema } from "../schemaParser.ts";
 import {
   defTypeSchemaName,
@@ -24,8 +24,8 @@ export async function printInputSchema({
       apiSchema.apiFields
         .filter((f) =>
           [
-            // NOTE: "image", "mediaList" and "file" are not supported: cf. https://document.microcms.io/content-api/post-content#h85a0f187d4
-            "image",
+            // NOTE: "media", "mediaList" and "file" are not supported: cf. https://document.microcms.io/content-api/post-content#h85a0f187d4
+            "media",
             "mediaList",
             "file",
             // NOTE: "relation" and "relationList" must be in the form of id only

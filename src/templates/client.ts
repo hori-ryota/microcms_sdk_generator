@@ -1,7 +1,7 @@
-import { match } from "npm:ts-pattern@^5.0.3";
-import { format } from "npm:prettier@^3.0.0";
+import { match } from "ts-pattern";
+import { format } from "prettier";
 import { ApiDefinition } from "../schemaFilesParser.ts";
-import camelCase from "https://deno.land/x/case@2.1.1/camelCase.ts";
+import { toCamelCase as camelCase } from "@std/text";
 import {
   defTypeSchemaName,
   inputTypeName,
@@ -94,7 +94,7 @@ export function createClient({
     ).toString();
   }
 
-  async function request<OkResponseSchema extends z.AnyZodObject>(
+  async function request<OkResponseSchema extends z.ZodObject>(
     url: string,
     okResponseSchema: OkResponseSchema,
     options: RequestOptions
@@ -147,7 +147,7 @@ export function createClient({
     };
   }
 
-  function requestGet<OkResponseSchema extends z.AnyZodObject>(
+  function requestGet<OkResponseSchema extends z.ZodObject>(
     url: string,
     okResponseSchema: OkResponseSchema,
     query?: QueryForObjectApi | QueryForListApi,
@@ -178,7 +178,7 @@ export function createClient({
     );
   }
 
-  function requestWrite<OkResponseSchema extends z.AnyZodObject>(
+  function requestWrite<OkResponseSchema extends z.ZodObject>(
     method: "POST" | "PUT" | "PATCH" | "DELETE",
     url: string,
     okResponseSchema: OkResponseSchema,
@@ -238,7 +238,7 @@ export function createClient({
                   defTypeSchemaName(
                     endpointName,
                   )
-                }.merge(MicroCmsListContentFieldsSchema),
+                }.extend(MicroCmsListContentFieldsSchema.shape),
                       query,
                       options,
                     ),`,
@@ -340,7 +340,7 @@ export function createClient({
                   defTypeSchemaName(
                     endpointName,
                   )
-                }.merge(MicroCmsObjectContentFieldsSchema),
+                }.extend(MicroCmsObjectContentFieldsSchema.shape),
                       query,
                       options,
                     );

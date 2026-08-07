@@ -1,4 +1,4 @@
-import { pascalCase } from "https://deno.land/x/case@2.1.1/mod.ts";
+import { toPascalCase as pascalCase } from "@std/text";
 
 export function typeName(endpointName: string) {
   return `${pascalCase(endpointName)}`;

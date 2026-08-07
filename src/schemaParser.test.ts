@@ -1,10 +1,6 @@
-import {
-  dirname,
-  fromFileUrl,
-  join,
-} from "https://deno.land/std@0.194.0/path/mod.ts";
+import { dirname, fromFileUrl, join } from "@std/path";
 import { parseSchema } from "./schemaParser.ts";
-import { assertEquals } from "https://deno.land/std@0.194.0/testing/asserts.ts";
+import { assertEquals } from "@std/assert";
 
 const __filename = fromFileUrl(import.meta.url);
 const __dirname = dirname(__filename);

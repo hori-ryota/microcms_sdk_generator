@@ -82,8 +82,8 @@ Initialize the client with your service domain and API key.
 
 ```typescript
 const client = createClient({
-  serviceDomain: "YOUR_SERVICE_DOMAIN",
-  apiKey: "YOUR_API_KEY",
+    serviceDomain: "YOUR_SERVICE_DOMAIN",
+    apiKey: "YOUR_API_KEY",
 });
 ```
 
@@ -107,11 +107,11 @@ For example, for the `sampleForListApi` endpoint.
 
 ```typescript
 const listResp = await client.sampleForListApi.list({
-  limit: 2,
-  orders: ["-createdAt"],
+    limit: 2,
+    orders: ["-createdAt"],
 });
 if (!listResp.ok) {
-  throw listResp;
+    throw listResp;
 }
 console.log(listResp.data.contents);
 ```

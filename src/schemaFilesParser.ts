@@ -1,10 +1,8 @@
-import { join } from "https://deno.land/std@0.182.0/path/mod.ts";
-import {
-  existsSync,
-  expandGlobSync,
-} from "https://deno.land/std@0.182.0/fs/mod.ts";
+import { join } from "@std/path";
+import { existsSync } from "@std/fs/exists";
+import { expandGlobSync } from "@std/fs/expand-glob";
+import { walkSync } from "@std/fs/walk";
 import { type ApiSchema, ApiSchemaSchema } from "./schemaParser.ts";
-import { walkSync } from "https://deno.land/std@0.182.0/fs/walk.ts";
 
 const apiTypes = ["list", "object"] as const;
 

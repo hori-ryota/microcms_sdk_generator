@@ -3,10 +3,10 @@ import { z } from "zod";
 
 // cf. https://document.microcms.io/manual/automatic-grant-fields
 export const MicroCmsObjectContentFieldsSchema = z.object({
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  publishedAt: z.string().datetime().optional(),
-  revisedAt: z.string().datetime().optional(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  publishedAt: z.iso.datetime().optional(),
+  revisedAt: z.iso.datetime().optional(),
 });
 export type MicroCmsObjectContentFields = z.infer<
   typeof MicroCmsObjectContentFieldsSchema
@@ -18,16 +18,18 @@ export const OnlyIdSchema = z.object({
 export type OnlyId = z.infer<typeof OnlyIdSchema>;
 
 export const MicroCmsListContentFieldsSchema =
-  MicroCmsObjectContentFieldsSchema.merge(OnlyIdSchema);
+  MicroCmsObjectContentFieldsSchema.extend(OnlyIdSchema.shape);
 export type MicroCmsListContentFields = z.infer<
   typeof MicroCmsListContentFieldsSchema
 >;
 
-export const makeListResponseSchema = <DefTypeSchema extends z.AnyZodObject>(
+export const makeListResponseSchema = <DefTypeSchema extends z.ZodObject>(
   defTypeSchema: DefTypeSchema,
 ) =>
   z.object({
-    contents: z.array(MicroCmsListContentFieldsSchema.merge(defTypeSchema)),
+    contents: z.array(
+      MicroCmsListContentFieldsSchema.extend(defTypeSchema.shape),
+    ),
     totalCount: z.number(),
     limit: z.number(),
     offset: z.number(),
@@ -35,11 +37,11 @@ export const makeListResponseSchema = <DefTypeSchema extends z.AnyZodObject>(
 export type ListResponse = z.infer<ReturnType<typeof makeListResponseSchema>>;
 
 export const ObjectContentMetadataSchema = z.object({
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  publishedAt: z.string().datetime().nullable(),
-  revisedAt: z.string().datetime().nullable(),
-  closedAt: z.string().datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  publishedAt: z.iso.datetime().nullable(),
+  revisedAt: z.iso.datetime().nullable(),
+  closedAt: z.iso.datetime().nullable(),
   status: z.tuple([
     z.enum(["DRAFT", "PUBLISH", "PUBLISH_AND_DRAFT", "CLOSED"]),
   ]),
@@ -47,8 +49,8 @@ export const ObjectContentMetadataSchema = z.object({
   draftKey: z.string().nullable(),
   reservationTime: z
     .object({
-      publishTime: z.string().datetime().nullable(),
-      stopTime: z.string().datetime().nullable(),
+      publishTime: z.iso.datetime().nullable(),
+      stopTime: z.iso.datetime().nullable(),
     })
     .nullable(),
 });
@@ -80,7 +82,7 @@ export const SampleForObjectApiDefSchema = z.object({
   richeditor: z.string().optional(),
   image: z
     .object({
-      url: z.string().url(),
+      url: z.url(),
       height: z.number(),
       width: z.number(),
     })
@@ -88,13 +90,13 @@ export const SampleForObjectApiDefSchema = z.object({
   multipleimage: z
     .array(
       z.object({
-        url: z.string().url(),
+        url: z.url(),
         height: z.number(),
         width: z.number(),
       }),
     )
     .optional(),
-  datetime: z.string().datetime().optional(),
+  datetime: z.iso.datetime().optional(),
   boolean: z.boolean().optional(),
   selectfield: z.tuple([z.enum(["option1", "option2"])]).optional(),
   multipleselectfield: z.array(z.enum(["option1", "option2"])).optional(),
@@ -112,6 +114,7 @@ export const SampleForListApiInputSchema = SampleForListApiDefSchema.omit(
 export type SampleForListApiInput = z.infer<typeof SampleForListApiInputSchema>;
 
 export const SampleForObjectApiInputSchema = SampleForObjectApiDefSchema.omit({
+  image: true,
   multipleimage: true,
   relation: true,
   multirelation: true,
@@ -193,9 +196,9 @@ export class ParseResponseError extends Error {
     public readonly responseHeaders: Headers,
   ) {
     super(
-      `Failed to parse response with status code ${statusCode}: ${
-        parseError.message
-      }: ${JSON.stringify(data)}`,
+      `Failed to parse response with status code ${statusCode}: ${parseError.message}: ${JSON.stringify(
+        data,
+      )}`,
     );
   }
 }
@@ -227,7 +230,7 @@ export function createClient({
     ).toString();
   }
 
-  async function request<OkResponseSchema extends z.AnyZodObject>(
+  async function request<OkResponseSchema extends z.ZodObject>(
     url: string,
     okResponseSchema: OkResponseSchema,
     options: RequestOptions,
@@ -280,7 +283,7 @@ export function createClient({
     };
   }
 
-  function requestGet<OkResponseSchema extends z.AnyZodObject>(
+  function requestGet<OkResponseSchema extends z.ZodObject>(
     url: string,
     okResponseSchema: OkResponseSchema,
     query?: QueryForObjectApi | QueryForListApi,
@@ -311,7 +314,7 @@ export function createClient({
     );
   }
 
-  function requestWrite<OkResponseSchema extends z.AnyZodObject>(
+  function requestWrite<OkResponseSchema extends z.ZodObject>(
     method: "POST" | "PUT" | "PATCH" | "DELETE",
     url: string,
     okResponseSchema: OkResponseSchema,
@@ -356,7 +359,9 @@ export function createClient({
       }) =>
         requestGet(
           contentUrl(`sample-for-list-api/${id}`),
-          SampleForListApiDefSchema.merge(MicroCmsListContentFieldsSchema),
+          SampleForListApiDefSchema.extend(
+            MicroCmsListContentFieldsSchema.shape,
+          ),
           query,
           options,
         ),
@@ -471,7 +476,9 @@ export function createClient({
         const { options, ...query } = param ?? {};
         return requestGet(
           contentUrl(`sample-for-object-api`),
-          SampleForObjectApiDefSchema.merge(MicroCmsObjectContentFieldsSchema),
+          SampleForObjectApiDefSchema.extend(
+            MicroCmsObjectContentFieldsSchema.shape,
+          ),
           query,
           options,
         );

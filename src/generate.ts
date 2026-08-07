@@ -1,5 +1,5 @@
 import { parseSchemaFiles } from "./schemaFilesParser.ts";
-import { format } from "npm:prettier@^3.0.0";
+import { format } from "prettier";
 import { printDefTypeImpl } from "./templates/defType.ts";
 import { printOutputSchema } from "./templates/outputSchema.ts";
 import { printClientImpl } from "./templates/client.ts";

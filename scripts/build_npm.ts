@@ -33,16 +33,22 @@ await build({
     );
     Deno.copyFileSync("./LICENSE", "./npm/LICENSE");
     Deno.copyFileSync("./README.md", "./npm/README.md");
-    Deno.mkdirSync("./npm/esm/testdata/schemas/list", { recursive: true });
-    Deno.copyFileSync(
-      "./src/testdata/schemas/list/sample-for-list-api.schema.json",
-      "./npm/esm/testdata/schemas/list/sample-for-list-api.schema.json",
-    );
-    Deno.mkdirSync("./npm/esm/testdata/schemas/object", { recursive: true });
-    Deno.copyFileSync(
-      "./src/testdata/schemas/object/sample-for-object-api.schema.json",
-      "./npm/esm/testdata/schemas/object/sample-for-object-api.schema.json",
-    );
+    for (
+      const path of [
+        "schemas/list/sample-for-list-api.schema.json",
+        "schemas/object/sample-for-object-api.schema.json",
+        "schemas-management-api/list/sample-for-list-api.schema.json",
+        "schemas-management-api/object/sample-for-object-api.schema.json",
+      ]
+    ) {
+      Deno.mkdirSync(`./npm/esm/testdata/${path.replace(/\/[^/]+$/, "")}`, {
+        recursive: true,
+      });
+      Deno.copyFileSync(
+        `./src/testdata/${path}`,
+        `./npm/esm/testdata/${path}`,
+      );
+    }
     const npmignore = Deno.readTextFileSync("./npm/.npmignore");
     Deno.writeTextFileSync(
       "./npm/.npmignore",

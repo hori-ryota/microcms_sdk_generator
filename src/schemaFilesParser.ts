@@ -2,15 +2,10 @@ import { join } from "@std/path";
 import { existsSync } from "@std/fs/exists";
 import { expandGlobSync } from "@std/fs/expand-glob";
 import { walkSync } from "@std/fs/walk";
-import { type ApiSchema, ApiSchemaSchema } from "./schemaParser.ts";
+import { ApiSchemaSchema } from "./schemaParser.ts";
+import { type ApiDefinition, apiTypes } from "./apiDefinition.ts";
 
-const apiTypes = ["list", "object"] as const;
-
-export type ApiDefinition = {
-  endpointName: string;
-  apiSchema: ApiSchema;
-  apiType: (typeof apiTypes)[number];
-};
+export type { ApiDefinition };
 
 export function parseSchemaFiles(dirPath: string): ApiDefinition[] {
   return apiTypes

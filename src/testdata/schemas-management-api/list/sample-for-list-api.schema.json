@@ -1,0 +1,16 @@
+{
+  "apiFields": [
+    {
+      "fieldId": "textfield",
+      "name": "textfield",
+      "kind": "text",
+      "description": null,
+      "required": false,
+      "textSizeLimitValidation": null,
+      "patternMatchValidation": null,
+      "isUnique": false,
+      "initialValue": null
+    }
+  ],
+  "customFields": []
+}

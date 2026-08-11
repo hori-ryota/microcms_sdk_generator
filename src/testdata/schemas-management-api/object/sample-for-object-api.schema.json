@@ -1,0 +1,216 @@
+{
+  "apiFields": [
+    {
+      "fieldId": "textfield",
+      "name": "textfield",
+      "kind": "text",
+      "description": null,
+      "required": false,
+      "textSizeLimitValidation": null,
+      "patternMatchValidation": null,
+      "isUnique": false,
+      "initialValue": null
+    },
+    {
+      "fieldId": "textarea",
+      "name": "textarea",
+      "kind": "textArea",
+      "description": null,
+      "required": false,
+      "textSizeLimitValidation": null,
+      "patternMatchValidation": null,
+      "initialValue": null
+    },
+    {
+      "fieldId": "richeditor",
+      "name": "richeditor",
+      "kind": "richEditorV2",
+      "description": null,
+      "required": false,
+      "richEditorV2Options": [
+        "headerOne",
+        "headerTwo",
+        "headerThree",
+        "headerFour",
+        "headerFive",
+        "undo",
+        "redo",
+        "paragraph",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "code",
+        "blockquote",
+        "codeBlock",
+        "listBullet",
+        "listOrdered",
+        "link",
+        "image",
+        "file",
+        "table",
+        "horizontalRule",
+        "textAlign",
+        "customClass",
+        "oembedly",
+        "clean",
+        "color",
+        "size"
+      ],
+      "richEditorV2ColorList": [],
+      "richEditorV2HideColorPicker": false,
+      "richEditorV2FontSizeList": [],
+      "customClassList": []
+    },
+    {
+      "fieldId": "image",
+      "name": "image",
+      "kind": "media",
+      "description": null,
+      "required": false,
+      "imageSizeValidation": null,
+      "initialValue": null
+    },
+    {
+      "fieldId": "multipleimage",
+      "name": "multipleimage",
+      "kind": "mediaList",
+      "description": null,
+      "required": false,
+      "imageSizeValidation": null,
+      "mediaListLayout": "HORIZONTAL_SCROLL",
+      "initialValue": []
+    },
+    {
+      "fieldId": "datetime",
+      "name": "datetime",
+      "kind": "date",
+      "description": null,
+      "required": false,
+      "dateFormat": false,
+      "initialValue": null
+    },
+    {
+      "fieldId": "boolean",
+      "name": "boolean",
+      "kind": "boolean",
+      "description": null,
+      "required": false,
+      "initialValue": false
+    },
+    {
+      "fieldId": "selectfield",
+      "name": "selectfield",
+      "kind": "select",
+      "description": null,
+      "required": false,
+      "selectItems": [
+        {
+          "id": "UgD_PoTJQ5",
+          "value": "option1"
+        },
+        {
+          "id": "pjYNEQEvr_",
+          "value": "option2"
+        }
+      ],
+      "multipleSelect": false,
+      "initialValue": [
+        "DEFAULT"
+      ]
+    },
+    {
+      "fieldId": "multipleselectfield",
+      "name": "multipleselectfield",
+      "kind": "select",
+      "description": null,
+      "required": false,
+      "selectItems": [
+        {
+          "id": "MbtN0GJJba",
+          "value": "option1"
+        },
+        {
+          "id": "JdaHb1t7Ku",
+          "value": "option2"
+        }
+      ],
+      "multipleSelect": true,
+      "initialValue": [
+        "DEFAULT"
+      ]
+    },
+    {
+      "fieldId": "number",
+      "name": "number",
+      "kind": "number",
+      "description": null,
+      "required": false,
+      "numberSizeLimitValidation": null,
+      "initialValue": null
+    },
+    {
+      "fieldId": "relation",
+      "name": "relation",
+      "kind": "relation",
+      "description": null,
+      "required": false,
+      "listViewFieldId": "DEFAULT",
+      "referencedApiEndpoint": "sample-for-list-api"
+    },
+    {
+      "fieldId": "multirelation",
+      "name": "multirelation",
+      "kind": "relationList",
+      "description": null,
+      "required": false,
+      "relationListCountLimitValidation": null,
+      "listViewFieldId": "DEFAULT",
+      "referencedApiEndpoint": "sample-for-list-api"
+    },
+    {
+      "fieldId": "customField",
+      "name": "customField",
+      "kind": "custom",
+      "description": null,
+      "required": false,
+      "listViewFieldId": "DEFAULT",
+      "customFieldId": "customField1"
+    },
+    {
+      "fieldId": "repeater",
+      "name": "repeater",
+      "kind": "repeater",
+      "description": null,
+      "required": false,
+      "repeaterCountLimitValidation": null,
+      "customFieldIds": [
+        "customField1"
+      ]
+    }
+  ],
+  "customFields": [
+    {
+      "fieldId": "customField1",
+      "name": "customField1",
+      "fieldOrderByColumn": [
+        [
+          "title"
+        ]
+      ],
+      "fields": [
+        {
+          "fieldId": "title",
+          "name": "title",
+          "kind": "text",
+          "description": null,
+          "required": false,
+          "textSizeLimitValidation": null,
+          "patternMatchValidation": null,
+          "isUnique": false,
+          "initialValue": null
+        }
+      ]
+    }
+  ]
+}

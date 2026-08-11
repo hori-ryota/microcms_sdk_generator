@@ -63,14 +63,20 @@ export const ListContentMetadataSchema = ObjectContentMetadataSchema.extend({
 export type ListContentMetadata = z.infer<typeof ListContentMetadataSchema>;
 
 export const SampleForListApiDefSchema = z.object({
-  textfield: z.string().optional(),
+  textfield: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
 });
 export type SampleForListApiDef = z.infer<typeof SampleForListApiDefSchema>;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const SampleForObjectApi_CustomField1Schema = z.object({
   fieldId: z.string(),
-  title: z.string().optional(),
+  title: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
 });
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type SampleForObjectApi_CustomField1 = z.infer<
@@ -78,34 +84,72 @@ export type SampleForObjectApi_CustomField1 = z.infer<
 >;
 
 export const SampleForObjectApiDefSchema = z.object({
-  textfield: z.string().optional(),
-  textarea: z.string().optional(),
-  richeditor: z.string().optional(),
+  textfield: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
+  textarea: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
+  richeditor: z
+    .string()
+    .nullish()
+    .transform((v) => v ?? undefined),
   image: z
     .object({
       url: z.url(),
-      height: z.number(),
-      width: z.number(),
+      height: z.number().optional(),
+      width: z.number().optional(),
+      alt: z.string().optional(),
     })
-    .optional(),
+    .nullish()
+    .transform((v) => v ?? undefined),
   multipleimage: z
     .array(
       z.object({
         url: z.url(),
-        height: z.number(),
-        width: z.number(),
+        height: z.number().optional(),
+        width: z.number().optional(),
+        alt: z.string().optional(),
       }),
     )
-    .optional(),
-  datetime: z.iso.datetime().optional(),
-  boolean: z.boolean().optional(),
-  selectfield: z.tuple([z.enum(["option1", "option2"])]).optional(),
-  multipleselectfield: z.array(z.enum(["option1", "option2"])).optional(),
-  number: z.number().optional(),
-  relation: OnlyIdSchema.and(z.unknown()).optional(),
-  multirelation: z.array(OnlyIdSchema.and(z.unknown())).optional(),
-  customField: SampleForObjectApi_CustomField1Schema.optional(),
-  repeater: z.array(SampleForObjectApi_CustomField1Schema).optional(),
+    .nullish()
+    .transform((v) => v ?? undefined),
+  datetime: z.iso
+    .datetime()
+    .nullish()
+    .transform((v) => v ?? undefined),
+  boolean: z
+    .boolean()
+    .nullish()
+    .transform((v) => v ?? undefined),
+  selectfield: z
+    .union([z.tuple([z.enum(["option1", "option2"])]), z.tuple([])])
+    .nullish()
+    .transform((v) => (v?.length ? v : undefined)),
+  multipleselectfield: z
+    .array(z.enum(["option1", "option2"]))
+    .nullish()
+    .transform((v) => v ?? undefined),
+  number: z
+    .number()
+    .nullish()
+    .transform((v) => v ?? undefined),
+  relation: OnlyIdSchema.and(z.unknown())
+    .nullish()
+    .transform((v) => v ?? undefined),
+  multirelation: z
+    .array(OnlyIdSchema.and(z.unknown()))
+    .nullish()
+    .transform((v) => v ?? undefined),
+  customField: SampleForObjectApi_CustomField1Schema.nullish().transform(
+    (v) => v ?? undefined,
+  ),
+  repeater: z
+    .array(SampleForObjectApi_CustomField1Schema)
+    .nullish()
+    .transform((v) => v ?? undefined),
 });
 export type SampleForObjectApiDef = z.infer<typeof SampleForObjectApiDefSchema>;
 

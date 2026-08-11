@@ -4,7 +4,9 @@
     "jsr:@david/code-block-writer@^13.0.3": "13.0.3",
     "jsr:@deno/dnt@~0.43.2": "0.43.2",
     "jsr:@std/assert@^1.0.19": "1.0.19",
+    "jsr:@std/cli@^1.0.32": "1.0.32",
     "jsr:@std/fmt@1": "1.0.10",
+    "jsr:@std/fmt@^1.0.10": "1.0.10",
     "jsr:@std/fs@1": "1.0.24",
     "jsr:@std/fs@^1.0.24": "1.0.24",
     "jsr:@std/internal@^1.0.12": "1.0.14",
@@ -12,6 +14,7 @@
     "jsr:@std/path@1": "1.1.6",
     "jsr:@std/path@^1.1.5": "1.1.6",
     "jsr:@std/path@^1.1.6": "1.1.6",
+    "jsr:@std/regexp@^1.0.2": "1.0.2",
     "jsr:@std/text@^1.0.19": "1.0.19",
     "jsr:@ts-morph/bootstrap@0.29": "0.29.0",
     "jsr:@ts-morph/common@0.29": "0.29.0",
@@ -27,7 +30,7 @@
       "integrity": "8068703a782f389d9fcb4ead32809ca666d3b088262a23f1d9016cbc9af5d37f",
       "dependencies": [
         "jsr:@david/code-block-writer",
-        "jsr:@std/fmt",
+        "jsr:@std/fmt@1",
         "jsr:@std/fs@1",
         "jsr:@std/path@1",
         "jsr:@ts-morph/bootstrap"
@@ -37,6 +40,13 @@
       "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
       "dependencies": [
         "jsr:@std/internal@^1.0.12"
+      ]
+    },
+    "@std/cli@1.0.32": {
+      "integrity": "188b3a100d6202d64e3f5bd3d799c7fa4f6d77f92cc65eb7f641c1fa0aa92a66",
+      "dependencies": [
+        "jsr:@std/fmt@^1.0.10",
+        "jsr:@std/internal@^1.0.14"
       ]
     },
     "@std/fmt@1.0.10": {
@@ -58,8 +68,14 @@
         "jsr:@std/internal@^1.0.14"
       ]
     },
+    "@std/regexp@1.0.2": {
+      "integrity": "7493d47c077cfdb023e41a0b44fd608d87fe5b36fc3dc614261afc0f1452aabf"
+    },
     "@std/text@1.0.19": {
-      "integrity": "003a0e032d360e8c3a4e0410fb792c77a66bd6553fee9d60c6ec1bce30d29223"
+      "integrity": "003a0e032d360e8c3a4e0410fb792c77a66bd6553fee9d60c6ec1bce30d29223",
+      "dependencies": [
+        "jsr:@std/regexp"
+      ]
     },
     "@ts-morph/bootstrap@0.29.0": {
       "integrity": "69f9b1b42b03423308a9f623f924174181ef20f6f2a8771799f216f561b9b7a6",
@@ -90,6 +106,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@^1.0.19",
+      "jsr:@std/cli@^1.0.32",
       "jsr:@std/fs@^1.0.24",
       "jsr:@std/path@^1.1.6",
       "jsr:@std/text@^1.0.19",

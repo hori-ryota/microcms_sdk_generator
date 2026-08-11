@@ -12,6 +12,8 @@ Installation and usage are easily handled via npm or Deno.
   - [Installation with Deno](#installation-with-deno)
   - [Installation with npm](#installation-with-npm)
 - [Usage](#usage)
+  - [Generating from the management API](#generating-from-the-management-api)
+  - [Generating from schema files](#generating-from-schema-files)
 - [SDK Usage](#sdk-usage)
 - [Schema Files](#schema-files)
 - [Contributing](#contributing)
@@ -22,6 +24,8 @@ Installation and usage are easily handled via npm or Deno.
 
 - Generates TypeScript SDKs from your [microCMS](https://microcms.io/) API
   schema automatically.
+- Fetches schemas directly from the microCMS management API, or reads exported
+  schema files.
 - Utilizes [Zod](https://zod.dev/) schemas to maintain TypeScript type safety.
 - Supports usage in both server-side and client-side environments.
 
@@ -32,7 +36,7 @@ Installation and usage are easily handled via npm or Deno.
 Execute the following command for installation using Deno.
 
 ```sh
-deno install --allow-read --allow-write https://deno.land/x/microcms_sdk_generator/microcms_sdk_generator.ts
+deno install --allow-read --allow-write --allow-net --allow-env https://deno.land/x/microcms_sdk_generator/microcms_sdk_generator.ts
 ```
 
 > [microcms\_sdk\_generator \| Deno](https://deno.land/x/microcms_sdk_generator)
@@ -40,8 +44,11 @@ deno install --allow-read --allow-write https://deno.land/x/microcms_sdk_generat
 Or execute directly.
 
 ```sh
-deno run --allow-read --allow-write https://deno.land/x/microcms_sdk_generator/microcms_sdk_generator.ts
+deno run --allow-read --allow-write --allow-net --allow-env https://deno.land/x/microcms_sdk_generator/microcms_sdk_generator.ts
 ```
+
+NOTE: `--allow-net` and `--allow-env` are only required when generating from the
+management API.
 
 ### Installation with npm
 
@@ -61,8 +68,34 @@ npx microcms_sdk_generator
 
 ## Usage
 
-To use the tool, specify the directory of the schema files and the destination
-TypeScript file.
+### Generating from the management API
+
+Specify your service domain and API key, and the destination TypeScript file.
+Every API in the service is fetched and generated, so no directory layout is
+needed.
+
+```sh
+microcms_sdk_generator --service-domain <service domain> --api-key <api key> <destination typescript file>
+```
+
+The service domain and API key can also be given as the
+`MICROCMS_SERVICE_DOMAIN` and `MICROCMS_API_KEY` environment variables, which
+keeps the API key out of your shell history and process list.
+
+```sh
+MICROCMS_SERVICE_DOMAIN=your-service MICROCMS_API_KEY=your-api-key \
+  microcms_sdk_generator ./src/generated.ts
+```
+
+The API key needs the `API情報の取得 (一覧・詳細)` permission, which is granted
+under the `マネジメントAPI (ベータ)` tab of the API key settings.
+
+> [GET /api/v1/apis/{endpoint} \| microCMS](https://document.microcms.io/management-api/get-api-info)
+
+### Generating from schema files
+
+Alternatively, specify the directory of the schema files exported from the
+microCMS admin console, and the destination TypeScript file.
 
 ```sh
 microcms_sdk_generator <schema directory> <destination typescript file>
@@ -118,6 +151,9 @@ console.log(listResp.data.contents);
 
 ## Schema Files
 
+This section only applies when generating from schema files. Generating from the
+management API resolves everything below automatically.
+
 Schema files need to be placed under the schema directory in the following
 structure:
 
@@ -129,10 +165,12 @@ structure:
     - {endpointName}.json
     - ...
 
-NOTE: microCMS currently does not support exporting schemas per endpoint. You
-will need to use the exported schema file, but this file does not resolve
-`endpointName` and `API type (list or object)`. Therefore, you should structure
-your files as shown above.
+NOTE: A schema file exported from the admin console does not carry the
+`endpointName` or the `API type (list or object)`. Therefore, you should
+structure your files as shown above.
+
+Both the format exported from the admin console and the format returned by the
+management API are accepted.
 
 ## Contributing
 
@@ -145,6 +183,15 @@ This project is open-sourced under the MIT License. See the [LICENSE](./LICENSE)
 file for details.
 
 ## FAQ
+
+### How are empty fields represented?
+
+microCMS returns an empty field either as `null` or by omitting the key
+entirely, depending on how the content was written. The generated schemas accept
+both and normalize them to `undefined`, so an optional field is always typed as
+`T | undefined`.
+
+> [GET APIのフィールドごとのレスポンス形式 \| microCMS](https://document.microcms.io/content-api/get-api-field-responses)
 
 ### How can I set up a retry policy?
 
